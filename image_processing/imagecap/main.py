@@ -6,13 +6,13 @@ import argparse
 
 label='remote control'
 new_img='/tmp/sample_img.jpg'
+std_img = "./etc/co1.jpg"
 
 
 if __name__=='__main__':
     #parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     #parser.add_argument('--img', help='imge', required=True)
     #args = parser.parse_args()
-    std_img = "./etc/co1.jpg"
     cap_img(std_img)
     #capter img
 
