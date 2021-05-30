@@ -1,0 +1,26 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Form</title>
+	<meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; width=device-width;">
+</head>
+
+<body>
+	<form action="/alarm_update_<%= number %>" method="post">
+		<div>
+			<h1>Active</h1>
+			<input type="radio"  name="active" value="on">
+			<label for="on">ON</label><br>
+			<input type="radio"  name="active" value="off">
+			<label for="off">OFF</label><br>
+		</div>
+		
+		<div>
+			<h1>Time</h1>
+			<input type="time" name="time">
+		</div>
+		
+		<button typle="submit">UPDATE</button>
+	</form>
+ 
+</body>

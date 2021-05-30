@@ -169,12 +169,14 @@
 
     
     <tbody class="table-hover">
-        <% for(var i=0; i<=4; i++){ %>
+        <% for(var i=1; i<=3; i++){ %>
             <tr>
-                <td class="text-left">1</td>
+                <td class="text-left"></td>
                 <td class="text-left">2</td>
                 <td class="text-left">3</td>
-                <td class="text-left">4</td>
+                <td class="text-left">
+                    <a href="/update_<%= i %>">GO</a>
+                </td>
             </tr>
         <% } %>
     </tbody>
