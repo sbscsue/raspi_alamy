@@ -171,9 +171,9 @@
     <tbody class="table-hover">
         <% for(var i=1; i<=3; i++){ %>
             <tr>
-                <td class="text-left"></td>
-                <td class="text-left">2</td>
-                <td class="text-left">3</td>
+                <td class="text-left"><%= i %></td>
+                <td class="text-left"><%= alarm[i-1][0] %></td>
+                <td class="text-left"><%= alarm[i-1][1] %></td>
                 <td class="text-left">
                     <a href="/update_<%= i %>">GO</a>
                 </td>
