@@ -4,7 +4,7 @@ var exec = require('child_process').exec;
 const fs = require('fs');
 
 
-var project_path = '/home/pi/project'   /*설정01:git폴더 저장해놓은 폴더로 설정해놓으시오!*/
+var project_path = '/home/pi/Documents'   /*설정01:git폴더 저장해놓은 폴더로 설정해놓으시오!*/
 var file_path = '/raspi_alamy/web/weblamy/public'
 var link = [ ['/update_1','/alarm_update_1'], 
              ['/update_2','/alarm_update_2'], 
