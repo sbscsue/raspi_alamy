@@ -1,4 +1,5 @@
 from mkimg.cam import cap_img
+from mkimg.set_img import canny_img
 from cppixel.img_hist import cap_pix
 from labeling.label_img import main_labeling
 
@@ -20,7 +21,7 @@ if __name__=='__main__':
     label_str = main_labeling(new_img)
     print(label_str)
     if(label_str.find(label) != -1) :
-        cap_pix(new_img)
+        cap_pix(canny_img(new_img))
     
     print("include : " + str(label_str.find(label)))
 
