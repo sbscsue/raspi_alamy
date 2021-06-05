@@ -28,6 +28,9 @@ import picamera
 from PIL import Image
 from tflite_runtime.interpreter import Interpreter
 
+defualt_model = "../etc/model.tflite"
+defualt_label = "../etc/labels.txt"
+
 mission = 'notebook'
 
 def load_labels(path):
@@ -57,21 +60,21 @@ def classify_image(interpreter, image, top_k=1):
   return [(i, output[i]) for i in ordered[:top_k]]
 
 
-def main():
-  parser = argparse.ArgumentParser(
-      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-  parser.add_argument(
-      '--model', help='File path of .tflite file.', required=True)
-  parser.add_argument(
-      '--labels', help='File path of labels file.', required=True)
-  parser.add_argument(
-      '--value', help="Name of object to compare", required = True)
-  )
-  args = parser.parse_args()
+def object_main():
+  #parser = argparse.ArgumentParser(
+      #formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+  #parser.add_argument(
+      #'--model', help='File path of .tflite file.', required=True)
+  #parser.add_argument(
+      #'--labels', help='File path of labels file.', required=True)
+  #parser.add_argument(
+      #'--value', help="Name of object to compare", required = True)
+  #)
+  #args = parser.parse_args()
 
-  labels = load_labels(args.labels)
+  labels = load_labels(defualt_label)
 
-  interpreter = Interpreter(args.model)
+  interpreter = Interpreter(defualt_model)
   interpreter.allocate_tensors()
   _, height, width, _ = interpreter.get_input_details()[0]['shape']
 
@@ -107,4 +110,4 @@ def main():
 
 
 if __name__ == '__main__':
-  main()
+  object_main()
