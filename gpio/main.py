@@ -2,6 +2,9 @@ import RPi.GPIO as GPIO
 import datetime as dt
 import time as timer
 import argparse
+from ..image_processing.proc1 import main
+from ..image_processing.proc2.pose_detect.pose_estimation import pose_main
+from ..image_processing.proc3.object_com.object_compare import object_main
 
 def GPIO_SET():
     global pin_buzzer
@@ -19,8 +22,13 @@ def Parser():
     parser.add_argument('--number',required = True)
     parser.add_argument('--active',required = True)
     parser.add_argument('--time',required = True)
+    parser.add_argument('--method',required = True)
     args = parser.parse_args()
     return args
+# @method
+#   1 : image_label
+#   2 : pose_detect
+#   3 : object_compare
 
 
 GPIO_SET()
@@ -54,6 +62,12 @@ while active:
             timer.sleep(0.5)
             #child_process make
             if GPIO.input(pin_switch)==1:
+                if(args.method == "image_label"):
+                    #func
+                elif(args.method == "pose_detect") :
+                    pose_main()
+                elif(args.method == "object_compare") :
+                    object_main()
                 print("click")
                 break
     timer.sleep(1)
