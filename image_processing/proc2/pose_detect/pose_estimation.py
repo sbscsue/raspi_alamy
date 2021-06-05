@@ -1,26 +1,36 @@
 #import packages
 import os, argparse, cv2
 import numpy as np
-import time
+import time, random
 import pathlib, datetime, time
 from threading import Thread
 from tflite_runtime.interpreter import Interpreter
+from .keypoint import keypoint
 
-default_model = "/home/pi/Documents/ex_project/ex/image_processing/proc2/default.tflite"
+default_model = "/home/pi/Documents/ex_project/ex/image_processing/proc2/etc/default.tflite"
 
 class VideoStream:
     def __init__(self, resolution=(640, 480), framerate=30):
 
         self.stream = cv2.VideoCapture(0)
-        self.cap = self.stream.read()
         print("Camera initiated.")
         ret = self.stream.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
-
         ret = self.stream.set(cv2.CAP_PROP_FRAME_WIDTH, resolution[0])
         ret = self.stream.set(cv2.CAP_PROP_FRAME_HEIGHT, resolution[1])
 
         (self.status, self.frame) = self.stream.read()
         self.stopped = False
+        self.nonce = make_nonce(resolution)
+        self.per_w = [0]*2
+        self.per_h = [0]*2
+        self.per_w[0] = self.nonce[0]/resolution[0]
+        self.per_w[1] = (self.nonce[0]+200)/resolution[0]
+
+        self.per_h[0] = self.nonce[1]/resolution[1]
+        self.per_h[1] = (self.nonce[1]+200)/resolution[1]
+
+
+        print("keypoint : %d, offset : (%d, %d) - (%.2f ~ %.2f, %.2f ~ %.2f)" % (self.nonce[2], self.nonce[0], self.nonce[1], self.per_w[0], self.per_w[1], self.per_h[0], self.per_h[1]))
 
     def start(self):
         Thread(target=self.update, args=()).start()
@@ -32,13 +42,21 @@ class VideoStream:
                 self.stream.release()
                 return
             (self.status, self.frame) = self.stream.read()
-            cv2.imshow("label", self.frame)
+            self.cap = self.frame.copy()
+            if self.status :
+                cv2.rectangle(self.cap, (self.nonce[0], self.nonce[1]),(self.nonce[0]+200, self.nonce[1]+200), (255, 0, 0), 5)
+                cv2.putText(self.cap, keypoint[self.nonce[2]], (320, 20), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
+                cv2.imshow("label", self.cap)
+                if cv2.waitKey(1)&0xFF == ord('q'):
+                    break 
+        cap.release()
 
-    def read(self):
+    def read_f(self):
         return self.frame
 
     def stop(self):
         self.stopped = True
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--modeldir', help = 'Folder the .tflite file is located in')
 #parser.add_argument('--model', help = 'Name of the .tflite file, if different than detect.tflite', required=True)
@@ -69,7 +87,7 @@ floating_model = (input_details[0]['dtype'] == np.float32)
 input_mean = 127.5
 input_std = 127.5
 
-cv2.namedWindow('Result')
+#cv2.namedWindow('Result')
 
 def mod(a,b):
     floored = np.floor_divide(a,b)
@@ -124,6 +142,16 @@ def draw_lines(keypoints, image, bad_pts):
         image = cv2.line(image, start_pos, end_pos, color, thickness)
     return image
 
+def make_nonce(_res):
+    # rand num for rectangle
+    nonce1 = random.randrange(5, _res[0]-200)
+    nonce2 = random.randrange(5, _res[1]-200)
+    # rand num for rand key points
+    nonce_num = random.randrange(0, 9)
+
+    return (nonce1, nonce2, nonce_num)
+    
+
 def pose_main(_path):
     debug = True
 
@@ -141,22 +169,27 @@ def pose_main(_path):
         while True:
             print('running loop')
             t1 = cv2.getTickCount()
-            frame1 = videostream.read()
+            frame1 = videostream.read_f()
             frame = frame1.copy()
+
             frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             frame_resized = cv2.resize(frame_rgb, (width, height))
             input_data = np.expand_dims(frame_resized, axis=0)
             frame_resized = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2RGB)
+
             if floating_model:
                 input_data = (np.float32(input_data) - input_mean) / input_std
+
             interpreter.set_tensor(input_details[0]['index'], input_data)
             interpreter.invoke()
             coords = sigmoid_and_argmax2d(output_details, min_conf_threshold)
             drop_pts = list(np.unique(np.where(coords == 0)[0]))
+
             offset_vectors = get_offsets(output_details, coords)
             keypoint_positions = coords * output_stride + offset_vectors
-            if debug :
-                print(keypoint_positions)
+
+            #if debug :
+                #print(keypoint_positions)
             for i in range(len(keypoint_positions)):
                 if i in drop_pts:
                     continue
@@ -167,6 +200,17 @@ def pose_main(_path):
                 color = (0, 255, 0)
                 thickness = 2
                 cv2.circle(frame_resized, center_coordinates, radius, color, thickness)
+                per= [0]*2
+                per[0] = center_coordinates[0]/int(width)
+                per[1] = center_coordinates[1]/int(height)
+
+                print("key point : %d,  offset : (%.2f, %.2f)" %(i, per[0], per[1]))
+                if(i==videostream.nonce[2]):
+                    if(per[0]>videostream.per_w[0] and per[0]<videostream.per_w[1] and per[1]>videostream.per_h[0] and per[1]<videostream.per_h[1]):
+                        print("suucesss!!!!!!\n\n\n\n")
+                        cv2.destroyAllWindows()
+                        videostream.stop()
+                        return True
                 if debug:
                     cv2.putText(frame_resized, str(i), (x-4, y-4), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 1)
                     frame_resized = draw_lines(keypoint_positions, frame_resized, drop_pts)
