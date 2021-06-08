@@ -235,5 +235,3 @@ def pose_main(_path):
         print('Stopped video stream.')
 
 
-if __name__=='__main__' :
-    pose_main("../pose_images")
