@@ -2,9 +2,23 @@ import RPi.GPIO as GPIO
 import datetime as dt
 import time as timer
 import argparse
-from ..image_processing.proc1 import main
+import threading as th
+
+"""
 from ..image_processing.proc2.pose_detect.pose_estimation import pose_main
 from ..image_processing.proc3.object_com.object_compare import object_main
+"""
+
+
+def example():
+    cnt = 0
+    print("start")
+    while True:
+        cnt+=1
+        if(cnt==10):
+            print("exit")
+            break
+        timer.sleep(1)
 
 def GPIO_SET():
     global pin_buzzer
@@ -45,7 +59,7 @@ else:
 
 
 time = args.time.split(":")
-time = map(int,time)
+time = list(map(int,time))
 alarm = dt.time(time[0],time[1],0,0)  
 
 
@@ -54,20 +68,18 @@ while active:
     real = dt.time(real.hour,real.minute,real.second,0)
     print(real)
     if(real==alarm):
+        thread = th.Thread(target=example)
+        thread.start()
+        
         while True:
             print("equal")
             GPIO.output(pin_buzzer,GPIO.HIGH)
             timer.sleep(0.5)
             GPIO.output(pin_buzzer,GPIO.LOW)
             timer.sleep(0.5)
-            #child_process make
-            if GPIO.input(pin_switch)==1:
-                if(args.method == "image_label"):
-                    #func
-                elif(args.method == "pose_detect") :
-                    pose_main()
-                elif(args.method == "object_compare") :
-                    object_main()
-                print("click")
+            if(thread.is_alive()==False):
+                print("thread die uhhhhh")
                 break
+            
+            
     timer.sleep(1)
