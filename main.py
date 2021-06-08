@@ -4,24 +4,23 @@ import time as timer
 import argparse
 import threading as th
 
-
-#from image_processing.proc2.pose_detect.pose_estimation import pose_main
+#from image_processing.proc1.compare_img.compare_img import proc_img
+from image_processing.proc2.pose_detect.pose_estimation import pose_main
 from image_processing.proc3.object_com.object_compare import object_main
 
 
 
-def img_processing():
+def img_processing(number):
     cnt = 0
     print("start")
-    object_main()
-    '''
-    while True:
-        cnt+=1
-        if(cnt==10):
-            print("exit")
-            break
-        timer.sleep(1)
-    '''
+    #if(number==1):
+    #    proc_img()
+    if(number==2):
+        pose_main("../pose_images")
+    if(number==3):
+        object_main()
+    
+  
 
 def GPIO_SET():
     global pin_buzzer
@@ -40,7 +39,6 @@ def Parser():
     parser.add_argument('--number',required = True)
     parser.add_argument('--active',required = True)
     parser.add_argument('--time',required = True)
-    parser.add_argument('--method',required = True)
     args = parser.parse_args()
     return args
 # @method
@@ -67,12 +65,14 @@ time = list(map(int,time))
 alarm = dt.time(time[0],time[1],0,0)  
 
 
+number = parser.number
+
 while active:
     real=dt.datetime.now().time()
     real = dt.time(real.hour,real.minute,real.second,0)
     print(real)
     if(real==alarm):
-        thread = th.Thread(target=img_processing)
+        thread = th.Thread(target=img_processing,args=(number))
         thread.start()
         
         while True:
@@ -82,7 +82,7 @@ while active:
             GPIO.output(pin_buzzer,GPIO.LOW)
             timer.sleep(0.5)
             if(thread.is_alive()==False):
-                print("thread die uhhhhh")
+                print("alarm off")
                 break
             
             

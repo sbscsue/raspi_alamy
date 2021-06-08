@@ -28,8 +28,10 @@ import picamera
 from PIL import Image
 from tflite_runtime.interpreter import Interpreter
 
-defualt_model = "../etc/model.tflite"
-defualt_label = "../etc/labels.txt"
+#setting absolute route
+root =
+defualt_model = "/home/pi/raspi_alamy/image_processing/proc3/etc/model.tflite"
+defualt_label = "/home/pi/raspi_alamy/image_processing/proc3/etc/labels.txt"
 
 mission = 'notebook'
 
