@@ -82,6 +82,7 @@ while active:
             GPIO.output(pin_buzzer,GPIO.LOW)
             timer.sleep(0.5)
             if(thread.is_alive()==False):
+                GPIO.output(pin_buzzer,GPIO.LOW)
                 print("alarm off")
                 break
             
