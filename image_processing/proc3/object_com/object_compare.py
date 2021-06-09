@@ -29,7 +29,7 @@ from PIL import Image
 from tflite_runtime.interpreter import Interpreter
 
 #setting absolute route
-root =
+root =''
 defualt_model = "/home/pi/raspi_alamy/image_processing/proc3/etc/model.tflite"
 defualt_label = "/home/pi/raspi_alamy/image_processing/proc3/etc/labels.txt"
 
