@@ -10,7 +10,7 @@ from .keypoint import keypoint
 default_model = "/home/pi/Documents/ex_project/ex/image_processing/proc2/etc/default.tflite"
 
 class VideoStream:
-    def __init__(self, resolution=(640, 480), framerate=30):
+    def __init__(self, resolution = (640, 480), framerate = 30):
 
         self.stream = cv2.VideoCapture(0)
         print("Camera initiated.")
@@ -19,7 +19,7 @@ class VideoStream:
         ret = self.stream.set(cv2.CAP_PROP_FRAME_HEIGHT, resolution[1])
 
         (self.status, self.frame) = self.stream.read()
-        self.stopped = False
+        self.stopped = False    
         self.nonce = make_nonce(resolution)
         self.per_w = [0]*2
         self.per_h = [0]*2
@@ -57,19 +57,21 @@ class VideoStream:
     def stop(self):
         self.stopped = True
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--modeldir', help = 'Folder the .tflite file is located in')
+#parser = argparse.ArgumentParser()
+#parser.add_argument('--modeldir', help = 'Folder the .tflite file is located in')
 #parser.add_argument('--model', help = 'Name of the .tflite file, if different than detect.tflite', required=True)
-parser.add_argument('--threshold', help='Threshold for displaying detected keypoints (between 0 and 1).', default = 0.5)
-
-parser.add_argument('--resolution', help='Desired webcam resolution in WxH.', default = '640x480')
+#parser.add_argument('--threshold', help='Threshold for displaying detected keypoints (between 0 and 1).', default = 0.5)
+default_threshold=0.5
+default_resolution = '640x480'
+#parser.add_argument('--resolution', help='Desired webcam resolution in WxH.', default = '640x480')
 #parser.add_argument('--output_path', help='Where to save processed images from pi.', required=True)
 
-args = parser.parse_args()
-MODELDIR_NAME = args.modeldir
+#args = parser.parse_args()
+#MODELDIR_NAME = args.modeldir
 MODEL_NAME = default_model
-min_conf_threshold = float(args.threshold)
-resW, resH = args.resolution.split('x')
+min_conf_threshold = float(default_threshold)
+#resW, resH = args.resolution.split('x')
+resW, resH = default_resolution.split('x')
 imW, imH = int(resW), int(resH)
 
 CWD_PATH = os.getcwd()

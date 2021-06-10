@@ -4,19 +4,22 @@ import time as timer
 import argparse
 import threading as th
 
-#from image_processing.proc1.compare_img.compare_img import proc_img
+from image_processing.proc1.compare_img.compare_img import proc_img
 from image_processing.proc2.pose_detect.pose_estimation import pose_main
 from image_processing.proc3.object_com.object_compare import object_main
 
 
 
 def img_processing(number):
+    number = int(number)
     cnt = 0
     print("start")
-    #if(number==1):
-    #    proc_img()
+    if(number==1):
+        proc_img()
     if(number==2):
+        print("hello")
         pose_main("../pose_images")
+
     if(number==3):
         object_main()
     
@@ -65,7 +68,7 @@ time = list(map(int,time))
 alarm = dt.time(time[0],time[1],0,0)  
 
 
-number = parser.number
+number = args.number
 
 while active:
     real=dt.datetime.now().time()
