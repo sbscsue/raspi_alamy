@@ -1,4 +1,6 @@
 import sys
+import RPi.GPIO as GPIO
+
 sys.path.append('/home/pi/raspi_alamy/image_processing/proc1')
 from mkimg.cam import cap_img
 from cppixel.img_hist import cap_pix
@@ -10,6 +12,7 @@ label=''
 new_img='/tmp/sample_img.jpg'
 #std_img = "/home/pi/Documents/raspi_alamy/web/weblamy/public/alarm1/img.jpg"
 std_img = "/home/pi/raspi_alamy/image_processing/proc1/etc/co1.jpg"
+
 def proc_img():
     label = main_labeling(std_img)
     label_str = ''
