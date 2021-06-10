@@ -5,9 +5,8 @@ const fs = require('fs');
 
 /*알람 프로세스 생성*/
 
-exec("python3 /home/pi/raspi_alamy/example.py") 
-
-var project_path = '/home/pi'   /*설정01:git폴더 저장해놓은 폴더로 설정해놓으시오!*/
+exec("python3 /home/pi/project/save2/example.py") 
+var project_path = '/home/pi/project'   /*설정01:git폴더 저장해놓은 폴더로 설정해놓으시오!*/
 var file_path = '/raspi_alamy/web/weblamy/public'
 var process_path = '/raspi_alamy/gpio/main.py'
 var link = [ ['/update_1','/alarm_update_1'], 
@@ -16,7 +15,7 @@ var link = [ ['/update_1','/alarm_update_1'],
 
 function get_setting(number){           
   var path = project_path+file_path+'/alarm'+number+'/setting.json';
-  var jsonFile = fs.readFileSync(path); 
+  var jsonFile = fs.readFileSync(path); /*의문 filesync / file 뭐가 다름 */
   var jsonData = JSON.parse(jsonFile)
   var jsonToArray = [jsonData.active,jsonData.time];
   return jsonToArray;
@@ -66,7 +65,6 @@ router.post(link[0][1],function(req,res){
   capture(1);
   
   res.send("전송완료");
-  exec("kill `ps -ef | grep 'python3 /home/pi/raspi_alamy/example.py' | grep -v grep | awk '{print $2}'`")
   
 });
 
