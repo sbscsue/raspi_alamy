@@ -20,7 +20,6 @@ from __future__ import print_function
 
 import argparse
 import time
-import sys
 
 import numpy as np
 from PIL import Image
@@ -31,10 +30,12 @@ def load_labels(_filename):
   with open(_filename, 'r') as f:
     return [line.strip() for line in f.readlines()]
 
+path = '/home/pi/raspi_alamy/image_processing/proc1/'
+
 def main_labeling(_img):
-    default_img = '/home/pi/raspi_alamy/image_processing/proc1/etc/co1.jpg'
-    default_model = '/home/pi/raspi_alamy/image_processing/proc1/etc/mobilenet_v1_1.0_224_quant.tflite'
-    default_txt = '/home/pi/raspi_alamy/image_processing/proc1/etc/labels.txt'
+    default_img = path+'/etc/co2.jpg'
+    default_model = path+'/etc/mobilenet_v1_1.0_224_quant.tflite'
+    default_txt = path+'/etc/labels.txt'
     interpreter = tflite.Interpreter(model_path=default_model)
     interpreter.allocate_tensors()
 

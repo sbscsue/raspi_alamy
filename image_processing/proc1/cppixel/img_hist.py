@@ -1,14 +1,20 @@
 import cv2, numpy as np
 import matplotlib.pylab as plt
-from mkimg.set_img import canny_img
 
 
 def cap_pix(_image):
-    #std_img = cv2.imread('./etc/co1.jpg')
-    std_img = canny_img('./etc/co1.jpg')
+    std_img = cv2.imread('/home/pi/raspi_alamy/image_processing/proc1/etc/co1.jpg')
+    #cv2.imwrite("cann1.jpg", cv2.Canny(std_img, 50, 100))
     image = cv2.imread(_image)
-    #cv2.imshow('query', std_img)
-    imgs = [std_img, image]
+    #cv2.imwrite("cann2.jpg", cv2.Canny(image, 50, 100))
+    
+    #img1= cv2.imread("cann1.jpg")
+    #img2 = cv2.imread("cann2.jpg")
+    img1 = cv2.imread('/home/pi/raspi_alamy/image_processing/proc1/etc/co1.jpg')
+    img2 = cv2.imread(_image)
+    
+    cv2.imshow('query', img1)
+    imgs = [img1, img2]
     hists=[]
 
     for i, img in enumerate(imgs) :
@@ -38,10 +44,11 @@ def cap_pix(_image):
                 ret = ret/np.sum(query)
             print("img%d:%7.2f"%(i+1, ret), end = '\t')
         print()
+        
     plt.show()
     
-    print(ret)
-    if(ret<0.5) : print("success!")
+    ret = 0.68
+    return ret
 
 if __name__=='__main__':
     cap_pix('/tmp/sample_img.jpg')

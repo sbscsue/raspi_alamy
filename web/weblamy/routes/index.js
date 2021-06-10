@@ -9,7 +9,7 @@ const fs = require('fs');
 
 var project_path = '/home/pi'   /*설정01:git폴더 저장해놓은 폴더로 설정해놓으시오!*/
 var file_path = '/raspi_alamy/web/weblamy/public'
-var process_path = '/raspi_alamy/gpio/main.py'
+var process_path = '/raspi_alamy/main.py'
 var link = [ ['/update_1','/alarm_update_1'], 
              ['/update_2','/alarm_update_2'], 
              ['/update_3','/alarm_update_3']];
@@ -81,7 +81,7 @@ function update_process(number,value){
   });
 }
 function kill_process(number){
-  exec(" kill -9 `ps -ef | grep 'Ppython3 /home/pi/raspi_alamy/main.py --number "+number+"' | awk '{print $2}'`",(error, stdout, stderr) => {
+  exec(" kill -9 `ps -ef | grep 'python3 /home/pi/raspi_alamy/main.py --number "+number+"' | awk '{print $2}'`",(error, stdout, stderr) => {
     if (error) {
       console.error(`exec error: ${error}`);
       return;
@@ -152,8 +152,8 @@ router.post(link[2][1],function(req,res){
   console.log(data)
   data = {'active': data.active ,'time': data.time}
   alarm = [data.active,data.time]
-  kill_process(2)
-  update_process(2,alarm)
+  kill_process(3)
+  update_process(3,alarm)
   set_setting(3,data);
   capture(3);
   

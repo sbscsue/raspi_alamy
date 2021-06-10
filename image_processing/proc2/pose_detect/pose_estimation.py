@@ -210,8 +210,9 @@ def pose_main(_path):
                 if(i==videostream.nonce[2]):
                     if(per[0]>videostream.per_w[0] and per[0]<videostream.per_w[1] and per[1]>videostream.per_h[0] and per[1]<videostream.per_h[1]):
                         print("suucesss!!!!!!\n\n\n\n")
+                        videostream.stop() 
                         cv2.destroyAllWindows()
-                        videostream.stop()
+                        #videostream.stop()
                         return True
                 if debug:
                     cv2.putText(frame_resized, str(i), (x-4, y-4), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 1)

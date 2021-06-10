@@ -5,8 +5,8 @@ import argparse
 import threading as th
 
 
-from image_processing.proc2.pose_detect.pose_estimation import pose_main
-from image_processing.proc3.object_com.object_compare import object_main
+#from image_processing.proc2.pose_detect.pose_estimation import pose_main
+#from image_processing.proc3.object_com.object_compare import object_main
 
 
 
