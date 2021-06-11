@@ -3,11 +3,17 @@ import datetime as dt
 import time as timer
 import argparse
 import threading as th
+import keyboard
 
 from image_processing.proc1.compare_img.compare_img import proc_img
 from image_processing.proc2.pose_detect.pose_estimation import pose_main
 from image_processing.proc3.object_com.object_compare import object_main
 
+key=''
+
+def print_pressed_keys(e):
+    global key
+    key = e.name
 
 
 def img_processing(number):
@@ -16,6 +22,7 @@ def img_processing(number):
     print("start")
     if(number==1):
         proc_img()
+        keyboard.hook(print_pressed_keys)
     if(number==2):
         print("hello")
         pose_main("../pose_images")
