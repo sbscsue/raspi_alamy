@@ -4,9 +4,6 @@ import argparse
 from PIL import Image
 import cv2 as cv
 import RPi.GPIO as GPIO
-import sys
-sys.path.append('/home/pi/raspi_alamy')
-from main import key
 
 new_img = '/tmp/sample_img.jpg'
 pin_button=''
@@ -22,7 +19,7 @@ def ret_button():
     return GPIO.input(pin_button)
 
 def cap_img(_image):
-    GPIO_SET()
+    #GPIO_SET()
     camera = picamera.PiCamera(resolution=(640, 480), framerate=30)
     camera.start_preview()
 
@@ -38,8 +35,9 @@ def cap_img(_image):
     over.layer = 3
 
     while True :
-        global key
+        key=input()
         if(key=='c'):
+            #if(ret_button()==1):
             print(camera.capture(new_img))
             break;
 
